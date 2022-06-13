@@ -1,5 +1,6 @@
 const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
+  publicPath: process.env.NODE_ENV === 'production' ? '/add-to-basket/' : '/',
   transpileDependencies: true,
   chainWebpack: (config) => {
     config.module.rules.delete('svg');
