@@ -29,7 +29,7 @@ export default {
   methods: {
     addToBasketHandler() {
       this.isLoading = true;
-      this.$emit('add-to-basket');
+      this.$emit('addToBasket');
       setTimeout(() => {
         this.isLoading = false;
       }, 1000);

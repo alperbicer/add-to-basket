@@ -15,7 +15,10 @@
     />
     <DetailPricingCombination :barem-list="baremList" :count.sync="count" />
     <DetailTotalPrice :count="count" :price="price" />
-    <BaseAddBasket :disabled="!isEnableAddToBasketButton" />
+    <BaseAddBasket
+      :disabled="!isEnableAddToBasketButton"
+      @addToBasket="addToBasketHandler"
+    />
   </div>
 </template>
 <script>
@@ -25,6 +28,7 @@ import DetailPriceRange from '@/components/Detail/PriceRange';
 import DetailPricingCombination from '@/components/Detail/PricingCombination';
 import DetailTotalPrice from '@/components/Detail/TotalPrice';
 import BaseAddBasket from '@/components/Base/AddBasket';
+import utils from '@/utils';
 export default {
   components: {
     BaseHeading,
@@ -74,6 +78,12 @@ export default {
   methods: {
     selectedVariantHandler(newSelectedVariantList) {
       this.$emit('update:selected-variant-list', newSelectedVariantList);
+    },
+    addToBasketHandler() {
+      const barem = this.baremList.find((barem) => this.count >= barem.minimumQuantity && this.count <= barem.maximumQuantity);
+      console.log('Barem', barem);
+      const attributeId = utils.checkIsExistSelectedVariant(this.selectableVariantList, this.selectedVariantList).id;
+      console.log('Attribute Id', attributeId);
     },
   },
 };
