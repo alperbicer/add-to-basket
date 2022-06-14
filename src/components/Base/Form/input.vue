@@ -10,8 +10,9 @@
       :max="max"
       v-bind="$attrs"
       v-on="inputListeners"
-      @focus="handleFocus(true)"
-      @blur="handleFocus(false)"
+      @focus="focushandler(true)"
+      @blur="focushandler(false)"
+      @keypress="keypressHandler"
     >
   </div>
 </template>
@@ -24,8 +25,8 @@ export default {
       default: 'text',
     },
     value: {
-      type: String,
-      default: '',
+      type: [String, Number],
+      default: null,
     },
     min: {
       type: Number,
@@ -51,15 +52,32 @@ export default {
       const vm = this;
       return Object.assign({}, this.$listeners, {
         input(event) {
-          const newValue = vm.maskRule ? event : event.target.value;
-          vm.$emit('input', newValue);
+          if (vm.type === 'number') {
+            const newValue = parseInt(event.target.value) > vm.max ? vm.max : parseInt(event.target.value) || null;
+            vm.$emit('input', newValue);
+            event.target.value = newValue;
+          } else {
+            vm.$emit('input', event.target.value);
+          }
         },
       });
     },
   },
   methods: {
-    handleFocus(focus) {
+    focushandler(focus) {
       this.isFocus = focus;
+    },
+    keypressHandler(event) {
+      if (this.type === 'number') {
+        let charCode = event.which || event.keyCode;
+        if ((charCode > 31 && (charCode < 48 || charCode > 57))) {
+          event.preventDefault();
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
     },
   },
 };

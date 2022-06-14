@@ -24,8 +24,9 @@
           type="number"
           :min="minCount"
           :max="maxCount"
+          :value="count"
           input-class="w-32 h-8 mr-5"
-          @input="(value) => $emit('update:count', parseInt(value || 0))"
+          @input="(value) => $emit('update:count', value)"
         />
         Adet
       </div>
@@ -50,6 +51,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    count: {
+      type: Number,
+      default: null,
+    },
   },
   computed: {
     minCount() {
@@ -59,7 +64,7 @@ export default {
       return this.baremList[this.baremList.length - 1].maximumQuantity;
     },
     formattedCount() {
-      return parseInt(this.count || 0);
+      return this.count || 0;
     },
   },
 };

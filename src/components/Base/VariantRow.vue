@@ -16,6 +16,7 @@
 </template>
 <script>
 import BaseButton from '@/components/Base/Button';
+import utils from '@/utils';
 export default {
   components: {
     BaseButton,
@@ -56,25 +57,18 @@ export default {
         title: this.variant.name,
         value: value,
       });
-      return newSelectedVariantList.length === this.attributeCount && !this.selectableVariantList
-        .find((variant) => {
-          return variant.attributes.every((attribute) => {
-            return newSelectedVariantList.some((selectedVariant) => {
-              return attribute.name === selectedVariant.title && attribute.value === selectedVariant.value;
-            });
-          });
-        });
+      return newSelectedVariantList.length === this.attributeCount &&
+        !utils.checkIsExistSelectedVariant(this.selectableVariantList, newSelectedVariantList);
     },
     getNewSelectedVariantList(variant) {
-      const newSelectedVariantList = JSON.parse(JSON.stringify(this.selectedVariantList));
-      if (!newSelectedVariantList.some((newSelectedVariant) => newSelectedVariant.title === variant.title)) {
-        newSelectedVariantList.push(variant);
-      }
+      let newSelectedVariantList = JSON.parse(JSON.stringify(this.selectedVariantList));
       if (newSelectedVariantList.length === this.attributeCount) {
         const newVariant = newSelectedVariantList.find((newSelectedVariant) => newSelectedVariant.title === variant.title);
         newVariant.value = variant.value;
         return newSelectedVariantList;
       } else {
+        newSelectedVariantList = newSelectedVariantList.filter((newSelectedVariant) => newSelectedVariant.title !== variant.title);
+        newSelectedVariantList.push(variant);
         return newSelectedVariantList;
       }
     },

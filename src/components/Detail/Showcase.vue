@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md mr-10">
+  <div class="max-w-md mr-10 mb-10">
     <BaseImg
       :src="imageList[selectedIndex]"
       custom-class="mx-auto"
@@ -29,6 +29,13 @@ export default {
     return {
       selectedIndex: 0,
     };
+  },
+  watch: {
+    imageList: {
+      handler() {
+        this.selectedIndex = 0;
+      },
+    },
   },
 };
 </script>
